@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.1184077">
+  <PropertyGroup>
+    <PackageJsonDirectory>C:\Users\chris\source\repos\TestBackend\TestBackend</PackageJsonDirectory>
+    <BuildCommand>npm run debug</BuildCommand>
+    <BuildOutputFolder>C:\Users\chris\source\repos\TestBackend\dist</BuildOutputFolder>
+  </PropertyGroup>
+</Project>

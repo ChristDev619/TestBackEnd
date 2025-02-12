@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Continent {
+  code    String    @id @db.VarChar(2)
+  name    String    @db.VarChar(15)
+  country Country[]
+
+  @@map("continent")
+}
+
+model Country {
+  code          String       @id @db.VarChar(3)
+  name          String       @db.VarChar(35)
+  iso_2         String       @db.VarChar(2)
+  iso_3         String       @db.VarChar(3)
+  continentCode String       @map("continent_code") @db.VarChar(2)
+  continent     Continent    @relation(fields: [continentCode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  wfcr          WFCR[]
+  wrcesFinal    WRCESFinal[]
+  wrcesMerit    WRCESMerit[]
+  wrcesSport    WRCESSport[]
+  wspi          WSPI[]
+
+  @@map("country")
+}
+
+model Discipline {
+  id               Int      @id @default(autoincrement())
+  sportName        String   @map("sport_name") @db.VarChar(35)
+  name             String   @unique @db.VarChar(50)
+  coeff            Decimal  @map("coefficient") @db.Decimal(5, 2)
+  coefficientMen   Decimal? @map("coeff_men") @db.Decimal(5, 2)
+  coefficientWomen Decimal? @map("coeff_women") @db.Decimal(5, 2)
+
+  @@map("discipline")
+}
+
+model Sport {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(35)
+  coefficient Decimal? @map("coeff") @db.Decimal(6, 2)
+
+  @@map("sport")
+}
+
+model WFCR {
+  id            Int     @id @default(autoincrement())
+  year          Int
+  rank          Int
+  countryCode   String  @map("country_code") @db.VarChar(3)
+  wrces         Decimal @db.Decimal(5, 2)
+  merit         Decimal @db.Decimal(5, 2)
+  wrcesPoints   Decimal @map("wrces_points") @db.Decimal(5, 2)
+  obesity       Decimal @db.Decimal(5, 2)
+  pou           Decimal @db.Decimal(5, 2)
+  avgPouObesity Decimal @map("avg_pou_obesity") @db.Decimal(5, 2)
+  points        Decimal @db.Decimal(5, 2)
+  change        Int?
+  country       Country @relation(fields: [countryCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "wfcr_country_fkey")
+
+  @@unique([year, countryCode])
+  @@map("wfcr")
+}
+
+model WRCESFinal {
+  id          Int     @id(map: "final_rank_pkey") @default(autoincrement())
+  year        Int
+  rank        Int
+  countryCode String  @map("country_code") @db.VarChar(3)
+  points      Decimal @db.Decimal(10, 0)
+  change      Int?
+  country     Country @relation(fields: [countryCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "final_rank_country_fkey")
+
+  @@unique([year, countryCode])
+  @@map("wrces_final")
+}
+
+model WRCESMerit {
+  id          Int     @id @default(autoincrement())
+  year        Int
+  rank        Int
+  countryCode String  @map("country_code") @db.VarChar(3)
+  gdpRank     Int     @map("gdp_rank")
+  wrcesRank   Int     @map("wrces_rank")
+  difference  Int
+  points      Decimal @db.Decimal(5, 2)
+  finalPoints Decimal @map("final_points") @db.Decimal(5, 2)
+  change      Int?
+  country     Country @relation(fields: [countryCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "wrces_merit_country_fkey")
+
+  @@unique([year, countryCode])
+  @@map("wrces_merit")
+}
+
+model WRCESSport {
+  id          Int      @id(map: "sport_rank_pkey") @default(autoincrement())
+  year        Int?
+  sportName   String?  @map("sport_name") @db.VarChar(35)
+  rank        Int?
+  countryCode String?  @map("country_code") @db.VarChar(3)
+  points      Decimal? @db.Decimal(20, 0)
+  change      Int?
+  country     Country? @relation(fields: [countryCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "sport_rank_country_code_fkey")
+
+  @@unique([year, countryCode, sportName])
+  @@map("wrces_sport")
+}
+
+model WSPI {
+  id              Int     @id @default(autoincrement())
+  year            Int
+  rank            Int
+  countryCode     String  @map("country_code") @db.VarChar(3)
+  wrcesPoints     Decimal @map("wrces_points") @db.Decimal(5, 2)
+  cityPoints      Decimal @map("city_points") @db.Decimal(5, 2)
+  proleaguePoints Decimal @map("proleague_points") @db.Decimal(5, 2)
+  points          Decimal @db.Decimal(5, 2)
+  change          Int?
+  country         Country @relation(fields: [countryCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "wspi_country_fkey")
+
+  @@unique([year, countryCode])
+  @@map("wspi")
+}
+
+model User {
+  id                                                       Int              @id @default(autoincrement())
+  email                                                    String           @unique @db.VarChar(50)
+  isEmployee                                               Boolean          @map("is_employee")
+  name                                                     String?          @db.VarChar(150)
+  phone                                                    String?          @db.VarChar(20)
+  discoverySource                                          Int?             @map("discovery_source")
+  emailOptIn                                               Boolean?         @map("email_opt_in")
+  discovery_source_user_discovery_sourceTodiscovery_source discoverySource? @relation("user_discovery_sourceTodiscovery_source", fields: [discoverySource], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("user")
+}
+
+model discoverySource {
+  id                                           Int    @id @default(autoincrement())
+  source                                       String @db.VarChar(25)
+  count                                        Int?
+  user_user_discovery_sourceTodiscovery_source User[] @relation("user_discovery_sourceTodiscovery_source")
+
+  @@map("discovery_source")
+}

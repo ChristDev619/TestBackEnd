@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "@prisma/client": "^5.4.1",
+    "prisma": "^5.4.1",
+    "typescript": "^5.1.3"
+  }
+}

@@ -1,0 +1,13 @@
+node_modules
+# Keep environment variables out of version control
+.env
+# Logs
+logs
+*.log
+# Debug log from npm
+npm-debug.log
+
+.DS_Store
+/.vs/slnx.sqlite
+/.vs/TestBackend-api/FileContentIndex
+/.vs
