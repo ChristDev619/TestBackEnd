@@ -1,13 +1,27 @@
-node_modules
-# Keep environment variables out of version control
+# Ignore dependencies
+node_modules/
+
+# Ignore environment variables
 .env
-# Logs
+.env.local
+
+# Ignore logs
 logs
 *.log
-# Debug log from npm
-npm-debug.log
+npm-debug.log*
 
+# Ignore macOS system files
 .DS_Store
+
+# Ignore Visual Studio files
+/.vs/
 /.vs/slnx.sqlite
 /.vs/TestBackend-api/FileContentIndex
-/.vs
+
+# Ignore build artifacts
+dist/
+build/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
