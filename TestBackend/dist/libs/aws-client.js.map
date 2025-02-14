@@ -1,1 +1,0 @@
-{"version":3,"file":"aws-client.js","sourceRoot":"","sources":["../../src/libs/aws-client.ts"],"names":[],"mappings":";;;AAAA,8FAA0F;AAC1F,kDAAgD;AAExC,IAAA,UAAU,GAAK,OAAO,CAAC,GAAG,WAAhB,CAAiB;AAEnC,IAAM,aAAa,GAAG,IAAI,gEAA6B,CAAC;IACtD,MAAM,EAAE,UAAU;CACnB,CAAC,CAAC;AAMM,sCAAa;AAJtB,IAAM,SAAS,GAAG,IAAI,sBAAS,CAAC;IAC9B,MAAM,EAAE,UAAU;CACnB,CAAC,CAAC;AAEqB,8BAAS"}
