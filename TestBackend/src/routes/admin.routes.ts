@@ -72,8 +72,11 @@ adminRouter.patch(
   upload.single("updateCountryFile"),
   CountryController.modifyCountries
 );
+adminRouter.patch(
+  "/countries/:code", // ✅ Route for updating a single country
+  CountryController.modifyOneCountry
+);
 adminRouter.delete("/countries", CountryController.removeOneCountry);
-
 // Continent Routes
 adminRouter.post(
   "/continents",

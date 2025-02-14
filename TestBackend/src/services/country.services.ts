@@ -176,3 +176,26 @@ export const deleteOneCountry = async (code: string) => {
     },
   });
 };
+
+
+// UPDATE a Single Country
+export const updateOneCountry = async (code: string, countryData: Partial<Country>) => {
+  const existingEntry = await prisma.country.findUnique({
+    where: {
+      code,
+    },
+  });
+
+  if (!existingEntry) {
+    throw new Error(`Country with code ${code} not found`);
+  }
+
+  return await prisma.country.update({
+    where: {
+      code,
+    },
+    data: {
+      ...countryData,
+    },
+  });
+};

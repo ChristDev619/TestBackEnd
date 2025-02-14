@@ -6,6 +6,7 @@ import {
   createCountries,
   updateCountries,
   deleteOneCountry,
+  updateOneCountry,// <-- Import the new service function
 } from "../services/country.services";
 
 // Types
@@ -115,6 +116,32 @@ export const modifyCountries = async (req: Request, res: Response) => {
     }
   }
 };
+
+// PATCH - Update a single country
+export const modifyOneCountry = async (req: Request, res: Response) => {
+  const countryCode = req.params.code; // Get country code from URL params
+  const countryData = req.body; // Get update data from request body
+
+  if (!countryCode) {
+    return res.status(400).json("Country code is required.");
+  }
+
+  try {
+    const updatedCountry = await updateOneCountry(countryCode, countryData);
+
+    if (!updatedCountry) {
+      return res.status(404).json("Country not found.");
+    }
+
+    return res.status(200).json(updatedCountry);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(500).json(error.message);
+    }
+  }
+};
+
 
 // DELETE Country by code
 export const removeOneCountry = async (req: Request, res: Response) => {
